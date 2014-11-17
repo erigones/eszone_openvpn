@@ -1,0 +1,3 @@
+[submodule "api_openvpn"]
+	path = api_openvpn
+	url = git@github.com:erigones/api_openvpn.git
