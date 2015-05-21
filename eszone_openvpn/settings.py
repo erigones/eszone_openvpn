@@ -24,7 +24,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -36,8 +36,17 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'django.contrib.admindocs',
+    'api_openvpn',
 )
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,3 +90,46 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+VPN_PATHS = {
+    'easy-rsa_path': '/etc/openvpn/easy-rsa',
+    'openVPN-path': '/etc/openvpn',
+    'log-path': '/var/log'
+}
+
+VPN_VARS = {
+    'EASY_RSA': VPN_PATHS['easy-rsa_path'],
+    'OPENSSL': 'openssl',
+    'PKCS11TOOL': 'pkcs11-tool',
+    'GREP': 'grep',
+    'KEY_DIR': VPN_PATHS['easy-rsa_path'] + '/keys',
+    'PKCS11_MODULE_PATH': 'dummy',
+    'PKCS11_PIN': 'dummy',
+    'KEY_NAME': 'EasyRSA',
+}
+
+#default values for vars
+VPN_DEFAULT_VARS = {
+    'KEY_SIZE': '512',      #2024 is recomended
+    'CA_EXPIRE': '3650',
+    'KEY_EXPIRE': '3650',
+    'KEY_COUNTRY': 'SK',
+    'KEY_PROVINCE': 'CA',
+    'KEY_CITY': 'SK',
+    'KEY_ORG': 'ORG',
+    'KEY_EMAIL': 'vpn@vpn.com',
+}
+
+OPENVPN_COMMANDS = {
+    'run-server': 'openvpn {file}',     # this is using for testing specific config
+    'start': '/etc/init.d/openvpn start',
+    'stop': '/etc/init.d/openvpn stop',
+    'reload': '/etc/init.d/openvpn reload',
+    'restart': '/etc/init.d/openvpn restart',
+    'status': '/etc/init.d/openvpn status',
+}
+
+HELP_VARS = {
+    'testing_ip': '127.0.0.1'   # loopback interface is remocmmended
+}
+
